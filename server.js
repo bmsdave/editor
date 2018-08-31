@@ -7,8 +7,8 @@ const puppeteer = require('puppeteer');
 const imageDiff = require('image-diff');
 const maketName = "1"
 
-const pathToMaket = path.join(__dirname, "makets", `${maketName}.html`);
-const maketContent = fs.readFileSync(pathToMaket, "utf8");
+const pathToMaketHTML = path.join(__dirname, "makets", `${maketName}.html`);
+const maketContent = fs.readFileSync(pathToMaketHTML, "utf8");
 const screenshoter = require('./screenshoter.js');
 const getImagesDiff = require('./getImagesDiff.js');
 
@@ -21,6 +21,8 @@ var minioClient = new Minio.Client({
     accessKey: process.env.ACCESSKEY,
     secretKey: process.env.SECRETKEY
   });
+
+const pathToMaket = path.join(__dirname, "dist", "assets", "page.png");
 
 screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).then(() => {
 
