@@ -12,6 +12,18 @@
             window.location.origin === (e.origin || e.originalEvent.origin)
           ) {
             document.documentElement.innerHTML = e.data
+
+            const name = localStorage.getItem('name');
+            const time = Date.now()
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/api/saveCode', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+              name: name,
+              code: e.data,
+              time: time
+            }));
           }
         })
       </script>
