@@ -1,4 +1,4 @@
-const path = require('path');
+const fs = require('fs');
 const Differencify = require('differencify');
 const differencify = new Differencify({
   saveDifferencifiedImage: true,
@@ -6,19 +6,26 @@ const differencify = new Differencify({
 });
 
 
-(async () => {
-    const result = await differencify
-      .init({})
+const compare = async (file, content) => {
+    await differencify
+      .init()
       .launch()
       .newPage()
       .setViewport({ width: 1200, height: 800 })
-      .goto("file://" + path.join(__dirname, "makets", "1.html"))
+      .setContent(content)
       .waitFor(1000)
       .screenshot()
-      .toMatchSnapshot()
-      .result((result) => {
-        console.log(result); // Prints true or false
+      .toMatchSnapshot((resultDetail) => {
+        fs.appendFile(file, JSON.stringify(resultDetail, null, '    '), function (err) {
+          if (err) {
+              return console.log(err);
+          }
+
+          console.log("The JSON with difference was saved!");
+        });
       })
       .close()
       .end();
-  })();
+  }
+
+module.exports = compare
