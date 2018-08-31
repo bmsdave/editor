@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma, Sans-Serif, serif;
+            font-size: 24px;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content {
+            width: 1200px;
+            height: 800px;
+            background: #FFEF73;
+        }
+
+        .header {
+            width: 1200px;
+            height: 100px;
+            background: #F7DF1E;
+            display: grid;
+            grid-template-columns: 25% 25% 25% 25%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header--tab {
+            display: block;
+            width: 200px;
+            margin-left: 50px;
+            margin-right: 50px;
+            height: 100px;
+            align-items: center;
+            justify-content: center;
+            background: #CBB505;
+            line-height: 100px;
+        }
+
+        .main {
+            width: 1200px;
+            height: 600px;
+            display: grid;
+            grid-template-columns: 25% 50% 25%;
+        }
+
+        .center {
+            display: inline-block;
+            width: 600px;
+            height: 500px;
+            background: #F7DF1E;
+            line-height: 500px;
+            margin-top: 50px;
+        }
+
+        .left,
+        .right {
+            display: grid;
+            width: 300px;
+            height: 600px;
+            line-height: 600px;
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            background: #CBB505;
+            border-radius: 50%;
+            margin-left: 100px;
+            margin-top: 50px;
+        }
+
+        .footer {
+            width: 1200px;
+            height: 100px;
+            background: #F7DF1E;
+            line-height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div class="header">
+            <div class="header--tab">200x100</div>
+            <div class="header--tab">200x100</div>
+            <div class="header--tab">200x100</div>
+            <div class="header--tab">200x100</div>
+        </div>
+        <div class="main">
+            <div class="left">300x600</div>
+            <div class="center">600x500</div>
+            <div class="right">
+                <div class="circle">r = 50</div>
+                <div class="circle">r = 50</div>
+                <div class="circle">r = 50</div>
+            </div>
+        </div>
+        <div class="footer">1200x100</div>
+    </div>
+</body>
+
+</html>
