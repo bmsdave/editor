@@ -7,25 +7,82 @@
 </head>
 
 <body>
-    <script>
-        document.addEventListener("DOMContentLoaded", ready);
-        window.results
-        function ready() {
-            function getResults() {
-                var x = new XMLHttpRequest();
-                x.open("GET", "/api/result", true);
-                x.onload = function () {
-                    console.log(x.responseText);
-                    window.results = JSON.parse(x.responseText);
-                }
-                x.send();
-            }
-            
-            // setInterval(getResults, 1000);
-            getResults();
-        }
 
-    </script>
+    <table>
+        <thead>
+            <tr>
+                <td>Имя</td>
+                <td>Отклонение</td>
+                <td>Результат</td>
+                <td>Оригинал</td>
+                <td>Разница</td>
+            </tr>
+        </thead>
+        <tbody id="results"></tbody>
+    </table>
+<script>
+const regexRes = /cid\/([\S]+)-([\S]+)-([\S]+)-([\S]+)\.diff\.png/
+const regexDist = /cid\/([\S]+)-([\S]+)-([\S]{13})\.png/
+
+function getResults() {
+    var x = new XMLHttpRequest();
+    x.open("GET", "/api/result", true);
+    x.onload = function () {
+        console.log(x.responseText);
+        const plain = x.responseText
+        const json = JSON.parse(plain)
+        window.json = json
+        window.res = json.filter((item) => regexRes.test(item.name))
+        window.resDist = json.filter((item) => regexDist.test(item.name))
+        buildTable(window.res)
+    }
+    x.send();
+}
+
+getResults()
+
+function parseResults(res, regex) {
+    const results = res.map((item, index) => {
+        const resultName = item.name
+        const parsed = regex.exec(resultName)
+
+        return {
+            name: parsed[1],
+            template: parsed[2],
+            itemName: item.name,
+            diff: parsed[4],
+        }
+    })
+    return results
+}
+
+function sortResults(results) {
+    return results.sort(function(prev, next) {
+        return Number(next.diff) - Number(prev.diff)
+    })
+}
+
+function buildTable(res) {
+    const $results = document.querySelector('#results')
+    const results = sortResults(parseResults(window.res, regexRes))
+    const resultsDist = sortResults(parseResults(window.resDist, regexDist))
+
+    $results.innerHTML = results.map((item, index) =>
+        `<tr>
+            <td>${item.name}</td>
+            <td>${item.diff}</td>
+            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" width="480" style="border: 1px solid black"/></td>
+            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" width="480" style="border: 1px solid black"/></td>
+            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" width="480" style="border: 1px solid black"/></td>
+        </tr>`
+    ).join(' ')
+}
+
+function ready() {
+    getResults()
+}
+document.addEventListener("DOMContentLoaded", ready);
+</script>
 </body>
 
 </html>
