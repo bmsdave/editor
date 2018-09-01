@@ -4,19 +4,39 @@
 <head>
 <meta charset="utf-8">
 <title>PiterJS - Results of code in the dark</title>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&amp;subset=cyrillic-ext" rel="stylesheet">
 <style>
     body {
-
+        background-color: #111;
+        color: #fafafa;
+        font-family: 'Source Sans Pro', sans-serif;
     }
-    .results {
+    h1 span {
+        color: #59cb8f;
+        font-size: 2em;
+    }
+    .logo {
+        max-width: 100%;
+        height: auto;
+    }
+    .wrapper {
         max-width: 90%;
         margin: auto;
+        text-align: center;
+    }
+    .results {
+        margin-top: 40px;
     }
     .results td {
-        border: 1px solid #000;
+        border: 1px solid #333;
+        border-radius: 3px;
+        padding: 2px 10px;
         text-align: center;
     }
     .results thead td {
+        color: #59cb8f;
+        font-weight: bold;
+        padding: 10px;
         text-align: center;
     }
     .results img {
@@ -27,18 +47,24 @@
 
 <body>
 
-    <table class="results">
-        <thead>
-            <tr>
-                <td>Имя</td>
-                <td>Отклонение</td>
-                <td>Результат</td>
-                <td>Оригинал</td>
-                <td>Разница</td>
-            </tr>
-        </thead>
-        <tbody id="results"></tbody>
-    </table>
+    <div class="wrapper">
+        <h1>
+            PiterJS - Результаты соревнования<br>
+            <span>CODE IN THE DARK</span>
+        </h1>
+        <table class="results">
+            <thead>
+                <tr>
+                    <td>Имя</td>
+                    <td>Отклонение</td>
+                    <td>Результат</td>
+                    <td>Оригинал</td>
+                    <td>Разница</td>
+                </tr>
+            </thead>
+            <tbody id="results"></tbody>
+        </table>
+    </div>
 <script>
 const regexRes = /cid\/([\S]+)-([\S]+)-([\S]+)-([\S]+)\.diff\.png/
 const regexDist = /cid\/([\S]+)-([\S]+)-([\S]{13})\.png/
@@ -86,15 +112,30 @@ function buildTable(res) {
     const results = sortResults(parseResults(window.res, regexRes))
     const resultsDist = sortResults(parseResults(window.resDist, regexDist))
 
-    $results.innerHTML = results.map((item, index) =>
-        `<tr>
+    $results.innerHTML = results.map((item, index) => {
+        const distName = `/api/get/${resultsDist[index].itemName}`
+        const template = `/api/get/cid/${item.template}.png`
+        const resName = `/api/get/${results[index].itemName}`
+        return `<tr>
             <td>${item.name}</td>
             <td>${item.diff}</td>
-            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" /></td>
-            <td><img src="/api/get/cid/${item.template}.png" alt="" /></td>
-            <td><img src="/api/get/${results[index].itemName}" alt="" /></td>
+            <td>
+                <a href="${distName}" target="_blank">
+                    <img src="${distName}" alt="" />
+                </a>
+            </td>
+            <td>
+                <a href="${template}" target="_blank">
+                    <img src="${template}" alt="" />
+                </a>
+            </td>
+            <td>
+                <a href="${resName}" target="_blank">
+                    <img src="${resName}" alt="" />
+                </a>
+            </td>
         </tr>`
-    ).join(' ')
+    }).join(' ')
 }
 
 function ready() {
