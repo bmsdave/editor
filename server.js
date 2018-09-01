@@ -11,7 +11,7 @@ const pathToMaketHTML = path.join(__dirname, "makets", `${maketName}.html`);
 const maketContent = fs.readFileSync(pathToMaketHTML, "utf8");
 const screenshoter = require('./screenshoter.js');
 const getImagesDiff = require('./getImagesDiff.js');
-
+const Stream = require('stream');
 const Minio = require('minio');
 
 var minioClient = new Minio.Client({
@@ -24,7 +24,16 @@ var minioClient = new Minio.Client({
 
 const pathToMaket = path.join(__dirname, "dist", "assets", "page.png");
 
-screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).then(() => {
+function toMinio(filename, data) {
+  minioClient.putObject('piterjs', `cid/${filename}`, data, function(e) {
+    if (e) {
+      return console.log(e)
+    }
+    console.log(`Successfully uploaded ${filename}`)
+  })
+}
+
+screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).then((maketScreenshotUint8Array) => {
 
   app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets')))
   app.use(express.json());
@@ -36,27 +45,15 @@ screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).t
   app.post('/api/saveCode', async function (req, res) {
 
     const filename = `${req.body.name}-${maketName}-${req.body.time}.png`;
-    const filenameDiff = `${req.body.name}-${maketName}-${req.body.time}.diff.png`;
     const file = path.join(__dirname, 'solution', filename);
-    await screenshoter(req.body.code, file);
-
-    minioClient.fPutObject('piterjs-cid', filename, file, function(e) {
-      if (e) {
-        return console.log(e)
-      }
-      console.log("Successfully uploaded the stream")
-    })
-
-    const diffResult = await getImagesDiff(pathToMaket, file, filenameDiff);
+    const solutionScreenshotUint8Array = await screenshoter(req.body.code);
     
-    const filenameResultDiff = `${diffResult.diffPercentage.toFixed(5)}-${req.body.name}-${maketName}-${req.body.time}.diff.png`
-    minioClient.fPutObject('piterjs-cid', filenameResultDiff, file, function(e) {
-      if (e) {
-        return console.log(e)
-      }
-      console.log("Successfully uploaded the stream")
-    })
+    toMinio(filename, solutionScreenshotUint8Array)
 
+    const diffResult = await getImagesDiff(maketScreenshotUint8Array, solutionScreenshotUint8Array);
+    
+    const filenameResultDiff = `${req.body.name}-${maketName}-${req.body.time}-${diffResult.diffPercentage.toFixed(5)}.diff.png`
+    toMinio(filenameResultDiff, diffResult.diffBuffer);
 
     res.send('code is saving to file ${file}!');
   })
