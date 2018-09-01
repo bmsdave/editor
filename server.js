@@ -32,6 +32,8 @@ function toMinio(filename, data) {
 
 screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).then((maketScreenshotUint8Array) => {
 
+  toMinio('1.png', maketScreenshotUint8Array);
+
   app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets')))
   app.use(express.json());
 
