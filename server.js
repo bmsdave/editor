@@ -63,7 +63,7 @@ screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).t
     })
   })
 
-  app.get('/api/get/:filename', function (req, res) {
+  app.get('/api/get/cid/:filename', function (req, res) {
 
     let filename = req.params.filename;
 
