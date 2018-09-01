@@ -2,13 +2,32 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title></title>
+<meta charset="utf-8">
+<title>PiterJS - Results of code in the dark</title>
+<style>
+    body {
+
+    }
+    .results {
+        max-width: 90%;
+        margin: auto;
+    }
+    .results td {
+        border: 1px solid #000;
+        text-align: center;
+    }
+    .results thead td {
+        text-align: center;
+    }
+    .results img {
+        max-width: 100%;
+    }
+</style>
 </head>
 
 <body>
 
-    <table>
+    <table class="results">
         <thead>
             <tr>
                 <td>Имя</td>
@@ -71,9 +90,9 @@ function buildTable(res) {
         `<tr>
             <td>${item.name}</td>
             <td>${item.diff}</td>
-            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" width="480" style="border: 1px solid black"/></td>
-            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" width="480" style="border: 1px solid black"/></td>
-            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" width="480" style="border: 1px solid black"/></td>
+            <td><img src="/api/get/${resultsDist[index].itemName}" alt="" /></td>
+            <td><img src="/api/get/cid/${item.template}.png" alt="" /></td>
+            <td><img src="/api/get/${results[index].itemName}" alt="" /></td>
         </tr>`
     ).join(' ')
 }
