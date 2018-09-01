@@ -2,9 +2,6 @@ const express = require('express')
 const app = express()
 const path = require('path');
 const fs = require('fs');
-const compare = require('./make_makets');
-const puppeteer = require('puppeteer');
-const imageDiff = require('image-diff');
 const maketName = "1"
 
 const pathToMaketHTML = path.join(__dirname, "makets", `${maketName}.html`);

@@ -4,7 +4,10 @@ const puppeteer = require('puppeteer');
 
 const screenshoter = async (fileContent) => {
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            executablePath: process.env.CHROME_BIN || null,
+            args: ['--no-sandbox', '--headless', '--disable-gpu']
+            });
         const page = await browser.newPage();
         await page.setViewport({ width: 1200, height: 800 }); //throws an error if height parameter is not specified
         await page.setContent(fileContent);
@@ -15,7 +18,6 @@ const screenshoter = async (fileContent) => {
     catch (e) {
         console.error(e);
     }
-
 }
 
 module.exports = screenshoter;
