@@ -42,6 +42,28 @@ screenshoter(maketContent, path.join(__dirname, "dist", "assets", "page.png")).t
     res.sendFile('editor.html', { root: path.join(__dirname, 'dist') });
   })
 
+  app.get('/result', function (req, res) {
+
+    res.sendFile('results.html', { root: path.join(__dirname, 'dist') });
+  })
+
+    app.get('/api/result', function (req, res) {
+
+    const stream = minioClient.listObjects("piterjs", "cid/", false)
+
+    const result = [];
+    stream.on('data', function(obj){
+      console.log("obj", obj)
+      result.push(obj);
+    })
+    stream.on('error', function(err){
+      res.send(err);
+    })
+    stream.on('end', function(err){
+      res.send(result);
+    })
+  })
+
   app.post('/api/saveCode', async function (req, res) {
 
     const filename = `${req.body.name}-${maketName}-${req.body.time}.png`;

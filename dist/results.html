@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", ready);
+        window.results
+        function ready() {
+            function getResults() {
+                var x = new XMLHttpRequest();
+                x.open("GET", "/api/result", true);
+                x.onload = function () {
+                    console.log(x.responseText);
+                    window.results = JSON.parse(x.responseText);
+                }
+                x.send();
+            }
+            
+            // setInterval(getResults, 1000);
+            getResults();
+        }
+
+    </script>
+</body>
+
+</html>
