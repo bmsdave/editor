@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 const Differencify = require('differencify');
+
 const differencify = new Differencify({
   saveDifferencifiedImage: true,
-  imageSnapshotPath: "img"
+  imageSnapshotPath: 'img',
 });
 
 
 const compare = async (file, content) => {
-    fs.readFile(path.join(__dirname, 'makets',  "1.html"), async (cont) => {
-
-      await differencify
+  fs.readFile(path.join(__dirname, 'makets', '1.html'), async (cont) => {
+    await differencify
       .init()
       .launch()
       .newPage()
@@ -22,20 +22,17 @@ const compare = async (file, content) => {
       .waitFor(1000)
       .screenshot()
       .toMatchSnapshot((resultDetail) => {
-        fs.appendFile(file, JSON.stringify(resultDetail, null, '    '), function (err) {
+        fs.appendFile(file, JSON.stringify(resultDetail, null, '    '), (err) => {
           if (err) {
-              return console.log(err);
+            return console.log(err);
           }
 
-          console.log("The JSON with difference was saved!");
+          console.log('The JSON with difference was saved!');
         });
       })
       .close()
       .end();
+  });
+};
 
-    })
-
-
-  }
-
-module.exports = compare
+module.exports = compare;
