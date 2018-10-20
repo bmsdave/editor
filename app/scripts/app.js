@@ -259,7 +259,7 @@ class App {
           Math.round(particle.x - (this.PARTICLE_SIZE / 2)),
           Math.round(particle.y - (this.PARTICLE_SIZE / 2)),
           this.PARTICLE_SIZE,
-          this.PARTICLE_SIZE
+          this.PARTICLE_SIZE,
         ));
       }
       return result;
@@ -270,7 +270,7 @@ class App {
     if (!this.powerMode) { return; }
 
     const intensity = 1 + (2 * Math.random() * Math.floor(
-      (this.currentStreak - this.POWER_MODE_ACTIVATION_THRESHOLD) / 100
+      (this.currentStreak - this.POWER_MODE_ACTIVATION_THRESHOLD) / 100,
     ));
     const x = intensity * (Math.random() > 0.5 ? -1 : 1);
     const y = intensity * (Math.random() > 0.5 ? -1 : 1);
