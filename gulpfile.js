@@ -44,7 +44,7 @@ var config = {
       },
 
       resolve: {
-        extensions: ['', '.js', '.coffee', '.scss', '.css', '.ttf'],
+        extensions: ['', '.js', '.scss', '.css', '.ttf'],
         alias: {
           assets: path.join(__dirname, config.paths.assets),
         },
@@ -52,8 +52,12 @@ var config = {
 
       module: {
         loaders: [
+          {
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel-loader?presets[]=env'
+          },
           { test: /\.scss$/, loaders: ['style', 'css', 'postcss-loader', 'sass'] },
-          { test: /\.coffee$/, loaders: ['coffee'] },
           { test: /\.png/, loaders: ['url-loader?mimetype=image/png'] },
           { test: /\.ttf/, loaders: ['url-loader?mimetype=font/ttf'] },
         ],
@@ -144,7 +148,7 @@ gulp
 
   .task('inline', () => gulp
     .src(`${config.paths.tmp}/index.html`)
-    .pipe($.inlineSource())
+    .pipe($.inlineSource({ compress: false }))
     .pipe(rename({ basename: 'editor' }))
     .pipe(gulp.dest(`${config.paths.dist}`)))
   .task('dist', () => runSequence('copy-assets', 'build', 'inline', 'copy-page-files'))
