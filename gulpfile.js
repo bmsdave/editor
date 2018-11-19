@@ -44,7 +44,7 @@ var config = {
       },
 
       resolve: {
-        extensions: ['', '.js', '.scss', '.css', '.ttf'],
+        extensions: ['', '.js', '.css', '.ttf'],
         alias: {
           assets: path.join(__dirname, config.paths.assets),
         },
@@ -57,7 +57,7 @@ var config = {
             exclude: /(node_modules|bower_components)/,
             loader: 'babel-loader?presets[]=env'
           },
-          { test: /\.scss$/, loaders: ['style', 'css', 'postcss-loader', 'sass'] },
+          { test: /\.css$/, loaders: ['style', 'css', 'postcss-loader'] },
           { test: /\.png/, loaders: ['url-loader?mimetype=image/png'] },
           { test: /\.ttf/, loaders: ['url-loader?mimetype=font/ttf'] },
         ],
